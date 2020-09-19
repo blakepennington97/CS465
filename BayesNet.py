@@ -3,6 +3,7 @@ import itertools
 import math
 import random
 from pprint import pprint
+from data import data
 
 
 class BayesNet(object):
@@ -148,9 +149,8 @@ def matches_evidence(row, evidence, net):
     return all(evidence[v] == row[net.variables.index(v)]
                for v in evidence)
 
-def calculate(X, evidence, net, true_false):
+def calculate(X, evidence, true_false, net):
     "The probability distribution for query variable X in a belief net, given evidence."
-    probability = 0;
     i = net.variables.index(X)  # The index of the query variable X in the row
     dist = defaultdict(float)  # The resulting probability distribution over X
     for (row, p) in joint_distribution(net).items():
@@ -181,39 +181,83 @@ def create_test_net():
 
 def create_bayes_net():
     bayes_net = (BayesNet()
-                 .add('IcyWeather', [], 0.2)
-                 .add('Battery', ['IcyWeather'], {T: 0.6, F: 0.9})
-                 .add('StarterMotor', ['IcyWeather'], {T: 0.5, F: 0.9})
-                 .add('Radio', ['Battery'], {T: 0.9, F: 0.1})
-                 .add('Ignition', ['Battery'], {T: 0.9, F: 0.2})
-                 .add('Gas', [], 0.9)
-                 .add('Starts', ['Ignition', 'StarterMotor', 'Gas'], {(T, T, T): 0.9, (T, T, F): 0.5,
-                                                                      (T, F, F): 0.1, (F, F, F): 0.01,
-                                                                      (T, F, T): 0.2, (F, T, F): 0.1,
-                                                                      (F, T, T): 0.15, (F, F, T): 0.05})
-                 .add('Moves', ['Starts'], {T: 0.99, F: 0.01}))
+                 .add('IW', [], data.get('IW'))
+                 .add('B', ['IW'], data.get('B'))
+                 .add('SM', ['IW'], data.get('SM'))
+                 .add('R', ['B'], data.get('R'))
+                 .add('I', ['B'], data.get('I'))
+                 .add('G', [], data.get('G'))
+                 .add('S', ['I', 'SM', 'G'], data.get('S'))
+                 .add('M', ['S'], data.get('M')))
 
     return bayes_net
 
 
+def format_input(user_input):
+    if (len(user_input) <= 1):
+        exit('Please enter a valid input.')
+    evidence_dict = {}
+    x = []
+    show_true = ''
+    show_true = user_input.split(',')[0].split('=')[1]
+    x.append(user_input.split(',')[0].split('=')[0])
+    if x[0] == 'IW':
+        x[0] = IW
+    if x[0] == 'B':
+        x[0] = B
+    if x[0] == 'R':
+        x[0] = R
+    if x[0] == 'I':
+        x[0] = I
+    if x[0] == 'SM':
+        x[0] = SM
+    if x[0] == 'G':
+        x[0] = G
+    if x[0] == 'S':
+        x[0] = S
+    if x[0] == 'M':
+        x[0] = M
+    evidence = user_input.split(',')
+    iterevidence = iter(evidence)
+    next(iterevidence)
+    for i in iterevidence:
+        i = i.split('=')
+        if i[0] == 'IW':
+            i[0] = IW
+        if i[0] == 'B':
+            i[0] = B
+        if i[0] == 'R':
+            i[0] = R
+        if i[0] == 'I':
+            i[0] = I
+        if i[0] == 'SM':
+            i[0] = SM
+        if i[0] == 'G':
+            i[0] = G
+        if i[0] == 'S':
+            i[0] = S
+        if i[0] == 'M':
+            i[0] = M
+        if i[1] == 'true':
+            i[1] = T
+        if i[1] == 'false':
+            i[1] = F
+        evidence_dict[i[0]] = i[1]
+
+    if show_true == 'true':
+        show_true = 1
+    if show_true == 'false':
+        show_true = 0
+
+    return(x[0], evidence_dict, show_true)
+
+
 if __name__ == '__main__':
-    test_net = create_test_net()
     bayes_net = create_bayes_net()
     globalize(bayes_net.lookup)
-    globalize(test_net.lookup)
-    #print(bayes_net.variables)
-    print(bayes_net.variables)
-    #pprint(set(all_rows(bayes_net)))
-    #print(P(IcyWeather, {Battery: F, Radio: F}))
-    #pprint(matches_evidence())
-    #pprint(joint_distribution(bayes_net)[T, F, F, F, F, F, F, F])
-    #print(calculate(Alarm, {MaryCalls: T, Earthquake: T}, test_net))
-    print(calculate(IcyWeather, {Battery: F, Radio: F}, bayes_net, 1))
-    print(calculate(IcyWeather, {}, bayes_net, 0))
-    print(calculate(IcyWeather, {Battery: F, Ignition: F, Starts: T}, bayes_net, 1))
-    print(calculate(Gas, {Moves: F}, bayes_net, 1))
-    print(calculate(Battery, {Gas: F, Moves: T}, bayes_net, 0))
-    print(calculate(IcyWeather, {Battery: F, Radio: F, StarterMotor: F,
-                                     Ignition: F, Gas: F, Starts: F, Moves: F}, bayes_net, 0))
-    print(calculate(IcyWeather, {Battery: T, Radio: T, StarterMotor: T,
-                                     Ignition: T, Gas: T, Starts: T, Moves: T}, bayes_net, 1))
+    user_query = '';
+
+    while (user_query != 'exit'):
+        user_query = input('Enter query: ')
+        command = format_input(user_query)
+        print("Result: ", calculate(command[0], command[1], command[2], bayes_net))
