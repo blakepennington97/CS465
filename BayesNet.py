@@ -196,6 +196,8 @@ def create_bayes_net():
 def format_input(user_input):
     if (len(user_input) <= 1):
         exit('Please enter a valid input.')
+    if (user_input == 'exit'):
+        exit(0)
     evidence_dict = {}
     x = []
     show_true = ''
