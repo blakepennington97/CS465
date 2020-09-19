@@ -2,6 +2,7 @@ from collections import defaultdict, Counter
 import itertools
 import math
 import random
+from pprint import pprint
 
 
 class BayesNet(object):
@@ -137,6 +138,7 @@ def enumeration_ask(X, evidence, net):
     dist = defaultdict(float)  # The resulting probability distribution over X
     for (row, p) in joint_distribution(net).items():
         if matches_evidence(row, evidence, net):
+            pprint(matches_evidence(row, evidence, net))
             dist[row[i]] += p
     return ProbDist(dist)
 
@@ -146,8 +148,72 @@ def matches_evidence(row, evidence, net):
     return all(evidence[v] == row[net.variables.index(v)]
                for v in evidence)
 
+def calculate(X, evidence, net, true_false):
+    "The probability distribution for query variable X in a belief net, given evidence."
+    probability = 0;
+    i = net.variables.index(X)  # The index of the query variable X in the row
+    dist = defaultdict(float)  # The resulting probability distribution over X
+    for (row, p) in joint_distribution(net).items():
+        if matches_evidence(row, evidence, net):
+            #pprint(matches_evidence(row, evidence, net))
+            dist[row[i]] += p
+    if (true_false):
+        return dist[1]
+    else:
+        return dist[0]
+
 
 def entropy(probdist):
     "The entropy of a probability distribution."
     return - sum(p * math.log(p, 2)
                  for p in probdist.values())
+
+
+def create_test_net():
+    test_net = (BayesNet()
+                 .add('Burglary', [], 0.001)
+                 .add('Earthquake', [], 0.002)
+                 .add('Alarm', ['Burglary', 'Earthquake'], {(T, T): 0.95, (T, F): 0.94, (F, T): 0.29, (F, F): 0.001})
+                 .add('JohnCalls', ['Alarm'], {T: 0.90, F: 0.05})
+                 .add('MaryCalls', ['Alarm'], {T: 0.70, F: 0.01}))
+    return test_net
+
+
+def create_bayes_net():
+    bayes_net = (BayesNet()
+                 .add('IcyWeather', [], 0.2)
+                 .add('Battery', ['IcyWeather'], {T: 0.6, F: 0.9})
+                 .add('StarterMotor', ['IcyWeather'], {T: 0.5, F: 0.9})
+                 .add('Radio', ['Battery'], {T: 0.9, F: 0.1})
+                 .add('Ignition', ['Battery'], {T: 0.9, F: 0.2})
+                 .add('Gas', [], 0.9)
+                 .add('Starts', ['Ignition', 'StarterMotor', 'Gas'], {(T, T, T): 0.9, (T, T, F): 0.5,
+                                                                      (T, F, F): 0.1, (F, F, F): 0.01,
+                                                                      (T, F, T): 0.2, (F, T, F): 0.1,
+                                                                      (F, T, T): 0.15, (F, F, T): 0.05})
+                 .add('Moves', ['Starts'], {T: 0.99, F: 0.01}))
+
+    return bayes_net
+
+
+if __name__ == '__main__':
+    test_net = create_test_net()
+    bayes_net = create_bayes_net()
+    globalize(bayes_net.lookup)
+    globalize(test_net.lookup)
+    #print(bayes_net.variables)
+    print(bayes_net.variables)
+    #pprint(set(all_rows(bayes_net)))
+    #print(P(IcyWeather, {Battery: F, Radio: F}))
+    #pprint(matches_evidence())
+    #pprint(joint_distribution(bayes_net)[T, F, F, F, F, F, F, F])
+    #print(calculate(Alarm, {MaryCalls: T, Earthquake: T}, test_net))
+    print(calculate(IcyWeather, {Battery: F, Radio: F}, bayes_net, 1))
+    print(calculate(IcyWeather, {}, bayes_net, 0))
+    print(calculate(IcyWeather, {Battery: F, Ignition: F, Starts: T}, bayes_net, 1))
+    print(calculate(Gas, {Moves: F}, bayes_net, 1))
+    print(calculate(Battery, {Gas: F, Moves: T}, bayes_net, 0))
+    print(calculate(IcyWeather, {Battery: F, Radio: F, StarterMotor: F,
+                                     Ignition: F, Gas: F, Starts: F, Moves: F}, bayes_net, 0))
+    print(calculate(IcyWeather, {Battery: T, Radio: T, StarterMotor: T,
+                                     Ignition: T, Gas: T, Starts: T, Moves: T}, bayes_net, 1))

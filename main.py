@@ -1,4 +1,4 @@
-from BayesNet import BayesNet, T, F, P, globalize
+from BayesNet import BayesNet, T, F, P, globalize, enumeration_ask
 
 
 def create_bayes_net():
@@ -28,4 +28,6 @@ def create_bayes_net():
 
 if __name__ == '__main__':
     bayes_net = create_bayes_net()
-    P(bayes_net.variables.pop())
+    globalize(bayes_net.lookup)
+    print(bayes_net.variables)
+    print(P(Battery))
