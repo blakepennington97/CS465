@@ -1,4 +1,4 @@
-# CS465
+# CS465 HW1
 
 This is a program that displays and tests the probability of the query hypothesis of the following Bayesian Network.
 
