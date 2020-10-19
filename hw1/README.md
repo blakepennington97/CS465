@@ -2,7 +2,7 @@
 
 This is a program that displays and tests the probability of the query hypothesis of the following Bayesian Network.
 
-![Image of Bayesian Network](https://github.com/blakepennington97/CS465/blob/master/image.png)
+![Image of Bayesian Network](https://github.com/blakepennington97/CS465/blob/master/hw1/image.png)
 
 To execute, run BayesNet.py. 
 
