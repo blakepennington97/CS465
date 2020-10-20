@@ -44,40 +44,24 @@ for i in transposed_df:
 newdf['z'] = final_z_list
 
 pprint(newdf)
-# new_z_df = pd.DataFrame(z_df.values[0:-1])
-# new_z_df = new_z_df.unstack(level=0)
-# pprint(new_z_df.tolist())
 
-# pprint(x_df.index)
-# pprint(x_df.columns)
+df = newdf
 
-# csv_file_list = ["x.csv", "y.csv", "z.csv"]
+X, y = make_regression(n_samples=200, random_state=1)
 
-# list_of_dataframes = []
-# for filename in csv_file_list:
-#     list_of_dataframes.append(pd.read_csv(filename))
+# pprint(X)
+# pprint([df['x'], df['y']])
 
-# merged_df = pd.concat(list_of_dataframes)
 
-# print(merged_df)
-# x_data = x_df.columns
-# y_data = y_df.columns
-# pprint(x_data)
-#print(y_data)
-#x, y = make_regression(n_samples=200, random_state=1)
+x_train, x_test, y_train, y_test = train_test_split(df.drop('z', axis=1), df['z'], test_size = 0.2, random_state=1)
 
-#pprint(x)
 
-# x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size = 0.3, random_state=1)
+model = MLPRegressor(random_state=1, max_iter=500).fit(x_train, y_train)
+result1 = model.predict(x_test[:2])
+result2 = model.score(x_test, y_test)
 
-# pprint(x_train)
-
-# model = MLPRegressor(random_state=1, max_iter=500).fit(x_train, y_train)
-# result1 = model.predict(x_test[:2])
-# result2 = model.score(x_test, y_test)
-
-# pprint(result1)
-# pprint(result2)
+pprint(result1)
+pprint(result2)
 
 #regr = MLPRegressor(random_state=1, max_iter=500).fit(x_train, y_train)
 
