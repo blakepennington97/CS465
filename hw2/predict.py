@@ -67,7 +67,7 @@ x_train, x_test, y_train, y_test = train_test_split(df.drop(['z'], axis=1), df['
 # x_test = sc.transform(x_test)
 
 # model setup and predict
-model = MLPRegressor(hidden_layer_sizes=(4,4,4), max_iter=500).fit(x_train, y_train)
+model = MLPRegressor(hidden_layer_sizes=(5,5,5), max_iter=500).fit(x_train, y_train)
 
 expected_y = y_test
 pprint(expected_y)
