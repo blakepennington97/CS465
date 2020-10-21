@@ -1,34 +1,46 @@
 import pandas as pd 
 import numpy as np
 import seaborn as sns; sns.set()
-import csv
 import matplotlib.pyplot as plt
-from sklearn import metrics
-from sklearn.datasets import make_regression
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
-from sklearn import svm
-from sklearn.neural_network import MLPClassifier, MLPRegressor
-from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.model_selection import train_test_split
 from pprint import pprint
-from sklearn import datasets
 from sklearn.mixture import GaussianMixture
 
 
-# read from input and put into dataframe
+# Read from input and put into dataframe
 data = pd.read_csv('p2-data', header=None)
 data.columns = ['a', 'b']
 pprint(data)
 
-# setup gmm
-gmm = GaussianMixture(n_components=5).fit(data)
-labels = gmm.predict(data)
-plt.scatter(data['a'], data['b'], s=40, cmap='viridis')
+# Cluster n_component estimation
+# indentifies ideal number of clusters for data
+n_components = np.arange(1, 21)
+models = [GaussianMixture(n, covariance_type='full', random_state=0).fit(data)
+          for n in n_components]
+
+# Plot the calculated ideal cluster estimation
+plt.plot(n_components, [m.bic(data) for m in models], label='BIC')
+plt.plot(n_components, [m.aic(data) for m in models], label='AIC')
+plt.legend(loc='best')
+plt.xlabel('n_components');
 plt.show()
+plt.close()
+
+# Set up and execute Gaussian model
+gmm = GaussianMixture(n_components=5, covariance_type='full').fit(data)
+
+# obtain mean (centers) of clusters
+means = gmm.means_
+pprint(means)
+
+# obtain covariances of clusters
+covariances = gmm.covariances_
+pprint(covariances)
+
+labels = gmm.predict(data)
 plt.scatter(data['a'], data['b'], c=labels, s=40, cmap='viridis')
 plt.show()
+
+
 
 
 
