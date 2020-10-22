@@ -13,9 +13,9 @@ the outcome of z values given the attributes x and y.
 
 **To execute Part 1, there are **two** steps:**
     
--First, run 'part1_create_model.py' with your desired x, y, and z values in the x.csv, y.csv, and z.csv files. This will generate and save a model that can be used during the second step.
+- First, run 'part1_create_model.py' with your desired x, y, and z values in the x.csv, y.csv, and z.csv files. This will generate and save a model that can be used during the second step.
 'python3 part1_create_model.py'
--Second, run 'part1_read_model.py' with your desired x and y test values in the x_test.csv and y_test.csv files. This will result in agenerated table of  predicted z values within z-predicted.csv
+- Second, run 'part1_read_model.py' with your desired x and y test values in the x_test.csv and y_test.csv files. This will result in agenerated table of  predicted z values within z-predicted.csv
 'python3 part1_read_model.py'
 
 **About Part 1**:
