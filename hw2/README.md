@@ -29,7 +29,7 @@ This program uses an unsupervised learning method, which in this case is the Gau
 
 For reference, the file p2-data was used as the dataset for this program.
 
-**Executing Part 2**
+**To execute Part 2**
 - Run part2.py with the desired data contained within p2-data
 - Usage `python3 part2.py`
 
