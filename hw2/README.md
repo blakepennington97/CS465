@@ -28,11 +28,11 @@ For reference, the file p2-data was used as the dataset for this program.
 
 About Part 2:
     Out of all the clustering methods available, the Guassian Mixture Model was chosen for this assignment due to how it fit to the data in the most ideal way. K-means works with more circular blobs, while GMM works well with abitrarily shaped data blobs. The data in p2-data dataset is more oriented towards the latter. K-means was chosen first to test clustering on the dataset. Although it is extremely efficient, it's simplistic nature limits how well the clusters can be fitted. Here is an example image of what was experienced.
-    ![Image of covariance parameters]https://qph.fs.quoracdn.net/main-qimg-17cc6dcd28056b547ba49486749696df
+![Image of covariance parameters](https://qph.fs.quoracdn.net/main-qimg-17cc6dcd28056b547ba49486749696df)
 
     In order to identify the ideal number of clusters, TODO was implemented.
     The reasoning of using the parameter of using 'full' TODO
-    ![Image of covariance parameters](https://scikit-learn.org/stable/_images/sphx_glr_plot_gmm_covariances_0011.png)
+![Image of covariance parameters](https://scikit-learn.org/stable/_images/sphx_glr_plot_gmm_covariances_0011.png)
 
 
 
