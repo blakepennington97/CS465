@@ -2,7 +2,7 @@
 
 This is a repository that uses both supervised and unsupervised algorithms to predict and analyze data.
 
-# Part 1
+## Part 1
 
 There exists a nonlinear relationship between input attributes x and y and output target z. The training set consists of 30 noisy samples.
 
@@ -11,16 +11,16 @@ the outcome of z values given the attributes x and y.
 
 ![Image of Multi-layer Perceptron](https://miro.medium.com/max/3446/1*-IPQlOd46dlsutIbUq1Zcw.png)
 
-To execute Part 1, there are two steps:
-    First, run part1_create_model.py with your desired x, y, and z values in the x.csv, y.csv, and z.csv files. This will generate and save a model that can be used during the second step.
+**To execute Part 1, there are **two** steps:**
+    1. First, run 'part1_create_model.py' with your desired x, y, and z values in the x.csv, y.csv, and z.csv files. This will generate and save a model that can be used during the second step.
 
-    Second, run part1_read_model.py with your desired x and y test values in the x_test.csv and y_test.csv files. This will result in agenerated table of  predicted z values within z-predicted.csv
+    2. Second, run 'part1_read_model.py' with your desired x and y test values in the x_test.csv and y_test.csv files. This will result in agenerated table of  predicted z values within z-predicted.csv
 
-About Part 1:
+**About Part 1**:
     The model of a multi-layer perceptron regressor was chosen over others is because TODO. The number (4,4,4) of hidden layer nodes was chosen because it seemed best suited to the sample size of the given data for the assignment. Max iterations during the training was raised from 200 to 500 for better approximations. I chose this model complexity with empirical loss over the training set because TODO.
 
 
-# Part 2
+## Part 2
 
 This program uses an unsupervised learning method, which in this case is the Gaussian Mixture Model, to identify clusters of similar data.
 
