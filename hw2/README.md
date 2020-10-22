@@ -14,9 +14,9 @@ the outcome of z values given the attributes x and y.
 **To execute Part 1, there are **two** steps:**
     
 - First, run 'part1_create_model.py' with your desired x, y, and z values in the x.csv, y.csv, and z.csv files. This will generate and save a model that can be used during the second step.
-'python3 part1_create_model.py'
+- Usage `python3 part1_create_model.py`
 - Second, run 'part1_read_model.py' with your desired x and y test values in the x_test.csv and y_test.csv files. This will result in agenerated table of  predicted z values within z-predicted.csv
-'python3 part1_read_model.py'
+- Usage `python3 part1_read_model.py`
 
 **About Part 1**:
     
@@ -30,8 +30,8 @@ This program uses an unsupervised learning method, which in this case is the Gau
 For reference, the file p2-data was used as the dataset for this program.
 
 **Executing Part 2**
--Run part2.py with the desired data contained within p2-data
-'python3 part2.py'
+- Run part2.py with the desired data contained within p2-data
+- Usage `python3 part2.py`
 
 
 **About Part 2:**
