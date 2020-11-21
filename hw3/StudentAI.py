@@ -48,6 +48,8 @@ def check_flush_draw(result, hand):
     j = 0
     found = False
 
+
+
     # grab only suites, not card numbers
     for i in hand:
         temp_list.append(i[1]) 
@@ -72,15 +74,16 @@ def check_straight_draw(result, hand):
     found = False
 
     # init temp_list
-    for i in range(14):
+    for i in range(15):
         temp_list.append((-1, -2))
     
-    # hand = ['Ks', '7h', '8h', 'Td', '6s']
+    #hand = ['2s', '8h', '3h', '4d', 'As']
 
     # grab rank values and place in temp list accordingly with associated original index values
     for i in hand:
         if i[0] == 'A':
             temp_list[1] = (i[0], j)
+            temp_list[14] = (i[0], j)
         elif i[0] == 'T':
             temp_list[10] = (i[0], j)
         elif i[0] == 'J':
@@ -138,6 +141,106 @@ def check_straight_draw(result, hand):
     #print(result)
     return result, found
 
+
+def keep_high_rank_cards(result, hand):
+    index_to_keep = 0
+    match = True
+    print "garbage hand"
+
+    for i in hand:
+        if i[0] == 'J' or 'Q' or 'K' or 'A':
+            result[index_to_keep] = True
+        index_to_keep+=1
+
+    return result, match
+
+
+def check_flush(result, hand):
+    match = False
+    hand = ['Ac', 'Ac', 'Ac', 'Ac', 'Ac'] # REMOVE
+    suits = [i[1] for i in hand]
+
+    if len(set(suits)) == 1:
+        match = True
+        print "flush exists!"
+        result = [False, False, False, False, False]
+    
+    return result, match
+
+
+def check_straight(result, hand):
+    temp_list = []
+    index_to_keep = 0
+    j = 0
+    found = False
+
+    # init temp_list
+    for i in range(15):
+        temp_list.append((-1, -2))
+    
+    hand = ['Ts', 'Jh', 'Kh', 'Qd', 'As'] # REMOVE
+
+    # grab rank values and place in temp list accordingly with associated original index values
+    for i in hand:
+        if i[0] == 'A':
+            temp_list[1] = (i[0], j)
+            temp_list[14] = (i[0], j)
+        elif i[0] == 'T':
+            temp_list[10] = (i[0], j)
+        elif i[0] == 'J':
+            temp_list[11] = (i[0], j)
+        elif i[0] == 'Q':
+            temp_list[12] = (i[0], j)
+        elif i[0] == 'K':
+            temp_list[13] = (i[0], j)
+        else:
+            temp_list[int(i[0])] = (i[0], j)
+        j+=1
+    
+    count = 0
+    is_straight = False
+
+    # determine if hand is straight
+    for i in range(len(temp_list)):
+        if temp_list[i][0] == -1:
+            count = 0
+            if (i > 0):
+                temp_list[i-1] = (-1, -1)
+        elif temp_list[i][0] != -1:
+            count+=1
+
+        if count == 5:
+            is_straight = True
+            break
+    
+    # set list of cards to keep in straight draw
+    if (is_straight):
+        print "straight exists!"
+        found = True
+        for i in temp_list:
+            if i[1] != -1:
+                result[i[1]] = False
+
+
+    
+
+    # return
+    #print(result)
+    return result, found
+
+
+def check_straight_flush(result, hand):
+    found = False
+    result, found1 = check_flush(False, hand)
+    result, found2 = check_straight(False, hand)
+
+    if (found1 and found2):
+        print "straight flush exists!"
+        found = True
+    
+    return result, found
+
+
 class StudentAI:
     student_Name = ""
     student_Hand = []
@@ -155,14 +258,22 @@ class StudentAI:
         print(hand)
 
         # TODO: implement logic such as (if both pair and trips, discard pair), etc.
-
-        result, match = check_straight_draw(result, hand)
+        if (not match):
+            result, match = check_straight_flush(result, hand)
+        if (not match):
+            result, match = check_flush(result, hand)
+        if (not match):
+            result, match = check_straight(result, hand)
+        if (not match):
+            result, match = check_straight_draw(result, hand)
         if (not match):
             result, match = check_flush_draw(result, hand)
         if (not match):
             result, match = check_trips(result, hand)
         if (not match):
             result, match = check_pair(result, hand)
+        if (not match):
+            result, match = keep_high_rank_cards(result, hand)
 
         print(result)
         return result
