@@ -11,10 +11,10 @@ def check_pair(result, hand):
     # now check for pairs, if found update that index to True (keep it!)
     for i in temp_list:
         if temp_list.count(i) == 2:
-            print "pair exists!"
+            #print "pair exists!"
             found = True
             index_to_keep = j
-            #print(index_to_keep)
+            ##print(index_to_keep)
             result[index_to_keep] = False
         j+=1
 
@@ -34,13 +34,41 @@ def check_trips(result, hand):
     # now check for trips, if found update that index to True (keep it!)
     for i in temp_list:
         if temp_list.count(i) == 3:
-            print "trip exists!"
+            #print "trip exists!"
             found = True
             index_to_keep = j
             result[index_to_keep] = False
         j+=1
 
     return result, found
+
+
+def check_two_pairs(result, hand):
+    temp_list = []
+    index_to_keep = 0
+    j = 0
+    count = 0
+    found = False
+    hand = ['Ac', '2c', 'As', 'Qs', 'Qh']
+
+    # grab only card numbers, not suites
+    for i in hand:
+        temp_list.append(i[0]) 
+    
+    # now check for pairs, if found update that index to True (keep it!)
+    for i in temp_list:
+        if temp_list.count(i) == 2:
+            index_to_keep = j
+            result[index_to_keep] = False
+            count+=1
+        j+=1
+    
+    if (count == 4):
+        found = True
+        #print "two pairs exists"
+
+    return result, found
+
 
 def check_flush_draw(result, hand):
     temp_list = []
@@ -57,10 +85,10 @@ def check_flush_draw(result, hand):
     # now check for flush, if found update that index to True (keep it!)
     for i in temp_list:
         if temp_list.count(i) == 4:
-            print "flush draw exists!"
+            #print "flush draw exists!"
             found = True
             index_to_keep = j
-            #print(index_to_keep)
+            ##print(index_to_keep)
             result[index_to_keep] = False
         j+=1
 
@@ -77,7 +105,7 @@ def check_straight_draw(result, hand):
     for i in range(15):
         temp_list.append((-1, -2))
     
-    #hand = ['2s', '8h', '3h', '4d', 'As']
+    #hand = ['9s', '8h', '6h', '5d', '3s']
 
     # grab rank values and place in temp list accordingly with associated original index values
     for i in hand:
@@ -138,18 +166,20 @@ def check_straight_draw(result, hand):
     
 
     # return
-    #print(result)
+    ##print(result)
     return result, found
 
 
 def keep_high_rank_cards(result, hand):
     index_to_keep = 0
     match = True
-    print "garbage hand"
+    #print "garbage hand"
+    temp = False
 
     for i in hand:
-        if i[0] == 'J' or 'Q' or 'K' or 'A':
+        if i[0] == 'J' or 'Q' or 'K' or 'A' and temp == False:
             result[index_to_keep] = True
+            temp = True
         index_to_keep+=1
 
     return result, match
@@ -157,12 +187,12 @@ def keep_high_rank_cards(result, hand):
 
 def check_flush(result, hand):
     match = False
-    hand = ['Ac', 'Ac', 'Ac', 'Ac', 'Ac'] # REMOVE
+    #hand = ['Ac', 'Ac', 'Ac', 'Ac', 'Ac'] # REMOVE
     suits = [i[1] for i in hand]
 
     if len(set(suits)) == 1:
         match = True
-        print "flush exists!"
+        #print "flush exists!"
         result = [False, False, False, False, False]
     
     return result, match
@@ -178,7 +208,7 @@ def check_straight(result, hand):
     for i in range(15):
         temp_list.append((-1, -2))
     
-    hand = ['Ts', 'Jh', 'Kh', 'Qd', 'As'] # REMOVE
+    #hand = ['Ts', 'Jh', 'Kh', 'Qd', 'As'] # REMOVE
 
     # grab rank values and place in temp list accordingly with associated original index values
     for i in hand:
@@ -215,7 +245,7 @@ def check_straight(result, hand):
     
     # set list of cards to keep in straight draw
     if (is_straight):
-        print "straight exists!"
+        #print "straight exists!"
         found = True
         for i in temp_list:
             if i[1] != -1:
@@ -225,17 +255,65 @@ def check_straight(result, hand):
     
 
     # return
-    #print(result)
+    ##print(result)
     return result, found
 
 
 def check_straight_flush(result, hand):
     found = False
-    result, found1 = check_flush(False, hand)
-    result, found2 = check_straight(False, hand)
+    result, found1 = check_flush(result, hand)
+    result, found2 = check_straight(result, hand)
 
     if (found1 and found2):
-        print "straight flush exists!"
+        #print "straight flush exists!"
+        found = True
+    
+    return result, found
+
+
+def check_royal_flush(result, hand):
+    found = False
+    ranks = sorted(hand)
+    result, found = check_straight_flush(result, hand)
+
+    if (found and ranks[0][0] == 'A' and ranks[4][0] == 'T'):
+        found = True
+        #print 'royal flush exists!'
+
+
+    return result, found
+
+
+def check_four_of_a_kind(result, hand):
+    found = False
+    temp_list = []
+    index_to_keep = 0
+    j = 0
+
+    # grab only card numbers, not suites
+    for i in hand:
+        temp_list.append(i[0]) 
+    
+    # now check for four of a kind, if found update that index to True (keep it!)
+    for i in temp_list:
+        if temp_list.count(i) == 4:
+            #print "four of a kind exists!"
+            found = True
+            index_to_keep = j
+            result[index_to_keep] = False
+        j+=1
+
+    return result, found
+
+
+def check_full_house(result, hand):
+    #hand = ['9c', 'Qs', 'Qh', '9s', 'Qh']
+    found = False
+    result, found1 = check_pair(result, hand)
+    result, found2 = check_trips(result, hand)
+
+    if (found1 and found2):
+        #print "full house exists!"
         found = True
     
     return result, found
@@ -248,26 +326,32 @@ class StudentAI:
     # The Draw
     #     Our draw decision is really based around the following. We'd rather make an above average strength hand frequently than a super-strong hand rarely.
     #         If we have a pair we draw 3 and try and make trips.
-    #         If we have trips, we draw two and try to make Quads or a boat. 
+    #         If we have trips, we draw two and try to make Quads or a full house. 
     #         If we have a flush-draw or straight-draw we draw one and try to hit.
     #         If we have total garbage (usually in a free play situation) we can hold on to cards above a Queen or Jack and replace the others.
     def student_function(self):
         result = [True, True, True, True, True]
-        hand=self.student_Hand
+        hand= self.student_Hand
         match = False
-        print(hand)
+        #print(hand)
 
-        # TODO: implement logic such as (if both pair and trips, discard pair), etc.
+        # logic such as (if both pair and trips, discard pair), etc.
+        if (not match):
+            result, match = check_royal_flush(result, hand)
         if (not match):
             result, match = check_straight_flush(result, hand)
+        if (not match):
+            result, match = check_four_of_a_kind(result, hand)
+        if (not match):
+            result, match = check_full_house(result, hand)
         if (not match):
             result, match = check_flush(result, hand)
         if (not match):
             result, match = check_straight(result, hand)
         if (not match):
-            result, match = check_straight_draw(result, hand)
-        if (not match):
             result, match = check_flush_draw(result, hand)
+        if (not match):
+            result, match = check_straight_draw(result, hand)
         if (not match):
             result, match = check_trips(result, hand)
         if (not match):
@@ -275,5 +359,5 @@ class StudentAI:
         if (not match):
             result, match = keep_high_rank_cards(result, hand)
 
-        print(result)
+        #print(result)
         return result
