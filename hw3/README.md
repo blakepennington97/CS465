@@ -1,6 +1,6 @@
-# CS465 HW2
+# CS465 HW3
 
-This is a repository that uses both supervised and unsupervised algorithms to predict and analyze data.
+This is a repository that uses the poker deuces library to predict scores of the hand in 5 card draw Poker. It also has algorithms to determine which cards to discard or keep to achieve an optimal win rate.
 
 ## Part 1
 
