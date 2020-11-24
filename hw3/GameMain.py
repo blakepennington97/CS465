@@ -19,7 +19,8 @@ class MainProgram:
         list_playerClass = [] #List of students' functions
         playerCount = 0
         while(playerCount < 2 or playerCount>5):
-            playerCount = input("Enter Number of Players:")
+            # playerCount = input("Enter Number of Players:")
+            playerCount = 3
             if playerCount > 1:
                 if playerCount == 2:
                     self.getPlayerSet1(playerCount,list_playerClass)
@@ -232,24 +233,6 @@ class MainProgram:
             if(rank < HighRank):
                 HighRank =rank
                 HighRankIndex = 3
-        
-        if(self.object5 is None):
-            print "\n"
-            print "Player "+ str(HighRankIndex+1)+ " is winner with rank "+ str(HighRank)
-            return 
-        else:
-            sh5 = self.convertHand(self.object5.student_Hand)
-            rank = evalulator.evaluate(board,sh5)
-            print "\n"
-            print "Player 5: " + self.object1.student_Name + "\t Cards: "+ self.printHand(self.object5.student_Hand) + "\t Card-rank: " + str(rank)
-            
-            if(rank < HighRank):
-                HighRank =rank
-                HighRankIndex = 4
-
-        print "\n"
-        print "Player "+ str(HighRankIndex+1)+ " is winner with rank "+ str(HighRank)
-        return 
 
 
     def createDeck(self):
@@ -280,8 +263,11 @@ class MainProgram:
 
     def exchangeCards(self, hand, list_Exchangeindex):
         exchangeindexCounter = 0
-        for i in range(0, 5):
-            if i == list_Exchangeindex[exchangeindexCounter]:
-                hand[i] = self.deck.pop()
-                exchangeindexCounter = exchangeindexCounter + 1
+        #for i in range(0, 5):
+        #    if i == list_Exchangeindex[exchangeindexCounter]:
+        #        hand[i] = self.deck.pop()
+        #        exchangeindexCounter = exchangeindexCounter + 1
+        #return hand
+        for index in list_Exchangeindex:
+            hand[index] = self.deck.pop()
         return hand

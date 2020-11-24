@@ -46,8 +46,8 @@ One interesting thing I noticed when implementing this logic was that if I used 
 - First, run 'PyPokerMain.py' This will prompt the user for the desired amount of players and which players to be used.
 - Usage `python2 PyPokerMain.py`
 - Enter the desired amount of players (2-5 players) and the name of the players. However, the name of the players MUST match the name of the Python file/class.
-- Example input:
-- ![Image of Example Input](https://i.imgur.com/GptvSBB.png)
+- Example input/output:
+- ![Image of Example Input/Output](https://i.imgur.com/x2itJQr.png)
 
 
 **Requirements:**
