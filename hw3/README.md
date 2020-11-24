@@ -55,8 +55,8 @@ One interesting thing I noticed when implementing this logic was that if I used 
     deuces
     
 **Sources used:**
-    https://towardsdatascience.com/poker-with-python-how-to-score-all-hands-in-texas-holdem-6fd750ef73d
-    https://github.com/BradAJ/video_poker_analyzer
-    https://github.com/worldveil/deuces
-    https://www.oddsshark.com/poker/hand-rankings
-    https://www.pokervip.com/strategy-articles/texas-hold-em-no-limit-beginner/5-card-draw-poker-basic-strategy
+-   https://towardsdatascience.com/poker-with-python-how-to-score-all-hands-in-texas-holdem-6fd750ef73d
+-   https://github.com/BradAJ/video_poker_analyzer
+-   https://github.com/worldveil/deuces
+-   https://www.oddsshark.com/poker/hand-rankings
+-   https://www.pokervip.com/strategy-articles/texas-hold-em-no-limit-beginner/5-card-draw-poker-basic-strategy
