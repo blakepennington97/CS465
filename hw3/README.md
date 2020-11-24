@@ -2,71 +2,61 @@
 
 This is a repository that uses the poker deuces library to predict scores of the hand in 5 card draw Poker. It also has algorithms to determine which cards to discard or keep to achieve an optimal win rate.
 
-## Part 1
 
-There exists a nonlinear relationship between input attributes x and y and output target z. The training set consists of 30 noisy samples.
 
-Using a parametric supervised training method, which in this case is a multi-layer perceptron regressor, the model is able to accurately predict
-the outcome of z values given the attributes x and y.
+## How It Works
 
-![Image of Multi-layer Perceptron](https://miro.medium.com/max/3446/1*-IPQlOd46dlsutIbUq1Zcw.png)
+When GameMain.py is ran, five cards are drawn from the deck and distributed to a playerbase which range from 2-5. Each player has an opportunity to discard any number of cards of their choosing in order to maximize their chances of having the winning hand. Once all the players have made their decisions, the player's hand is rated through a ranking system by the deuces library. The player with the highest rating (lowest score) is the winner.
 
-**To execute Part 1, there are **two** steps:**
+
+
+## Discard strategy
+
+To determine which cards to discard, a fairly straight-forward checking method is used. blakepennington.py parses and extracts the ranks and suites of the five cards in the hand. Then, some obvious checks are performed on the hand that checks for high ranking hands. If any high ranked hands return a match, then that hand is kept and no cards are discarded. The following hands are first checked in order of highest priority:
+
+1. Royal Flush
+2. Straight Flush
+3. Four of a Kind
+4. Full House
+5. Flush
+6. Straight
+
+After these high-ranked hands are checked, the following strategy is followed with the idea of aiming for an above-average hand frequently rather than a high-ranked hand rarely:
+* If we have a pair we draw 3 and try and make trips.
+* If we have trips, we draw two and try to make Quads or a full house. 
+* If we have a flush-draw or straight-draw we draw one and try to hit.
+* If we have total garbage (usually in a free play situation) we can hold on to cards above a Queen or Jack and replace the others.
+
+With this idea in mind, the following is checked in order of highest priority, following the numbered list above:
+
+7. Flush draw (1 card away from a flush)
+8. Straight draw (1 card away from a straight)
+9. Three of a Kind
+10. Pair
+11. High card
+
+![Image of Poker Hands](https://www.oddsshark.com/sites/default/files/styles/default/public/sb_101/2018/09/13/os-poker-hands-editorial-800x492.jpg)
+
+#### Interesting finds on the discard strategy
+One interesting thing I noticed when implementing this logic was that if I used a two pair check anywhere within my checks, it would drop my win-rate quite significantly. Thus, I decided not to include a two-pair check in my final implementation.
+
+
+**To execute this program, follow the steps below:**
     
-- First, run 'part1_create_model.py' with your desired x, y, and z values in the x.csv, y.csv, and z.csv files. This will generate and save a model that can be used during the second step.
-- Usage `python3 part1_create_model.py`
-- Second, run 'part1_read_model.py' with your desired x and y test values in the x_test.csv and y_test.csv files. This will result in agenerated table of  predicted z values within z-predicted.csv
-- Usage `python3 part1_read_model.py`
-
-**About Part 1**:
-    
-The model of a multi-layer perceptron regressor was chosen over others because it suits the exact use case Part 1 was designed for: predicting a real-valued value given a set of labeled inputs. The number (4,4,4) of hidden layer nodes was chosen because it seemed best suited to the sample size of the given data for the assignment. Max iterations during the training was raised from 200 to 500 for better approximations. I chose this model complexity with empirical loss over the training set because higher accuracy scores were achieved in testing when compared to other options.
-
-
-## Part 2
-
-This program uses an unsupervised learning method, which in this case is the Gaussian Mixture Model, to identify clusters of similar data. The program also outputs the mean (center) of clusters and covariance of individual clusters. At the end of execution, the program will show a comparison between the expected z values and predicted z values through a plot.
-
-For reference, the file p2-data was used as the dataset for this program.
-
-**To execute Part 2**
-- Run part2.py with the desired data contained within p2-data
-- Usage `python3 part2.py`
-
-
-**About Part 2:**
-    
-Out of all the clustering methods available, the Guassian Mixture Model was chosen for this assignment due to how it fit to the data in the most ideal way. K-means works with more circular blobs, while GMM works well with abitrarily shaped data blobs. The data in p2-data dataset is more oriented towards the latter. K-means was chosen first to test clustering on the dataset. Although it is extremely efficient, it's simplistic nature limits how well the clusters can be fitted. Here is an example image of what was experienced.
-
-![Image of covariance parameters](https://qph.fs.quoracdn.net/main-qimg-17cc6dcd28056b547ba49486749696df)
-
-In order to identify the ideal number of clusters, the data was fitted against a range of cluster sizes to achieve the best result. These results were then graphed as shown below. Notice the parallel dip. That represents the ideal number of clusters for this dataset.
-
-![Image of covariance parameters](https://imgur.com/YSGD3qX)
-
-The reasoning of using the covariance parameter = 'full' was through trial and error testing, and understanding/theory of how this particular parameter worked. A spherical value would lean more towards a k-means-like result during testing. Empircal testing was used while exploring the covariance parameter. An average covariance value was calculated and compared against other parameters. In the end, full covariance won out as the ideal choice. An example image is shown below.
-
-![Image of covariance parameters](https://scikit-learn.org/stable/_images/sphx_glr_plot_gmm_covariances_0011.png)
-
-
-
+- First, run 'PyPokerMain.py' This will prompt the user for the desired amount of players and which players to be used.
+- Usage `python2 PyPokerMain.py`
+- Enter the desired amount of players (2-5 players) and the name of the players. However, the name of the players MUST match the name of the Python file/class.
+- Example input:
+- ![Image of Example Input](https://i.imgur.com/GptvSBB.png)
 
 
 **Requirements:**
-    Python 3.6
-    sklearn
-    pandas
-    numpy
-    pickle
-    seaborn
-    matplotlib
-    
+    Python 2.7
+    deuces
     
 **Sources used:**
-    https://jakevdp.github.io/PythonDataScienceHandbook/05.12-gaussian-mixtures.html
-    https://seaborn.pydata.org/generated/seaborn.regplot.html
-    https://www.youtube.com/watch?v=0Lt9w-BxKFQ&feature=youtu.be
-    https://www.dezyre.com/recipes/use-mlp-classifier-and-regressor-in-python
-    https://scikit-learn.org/stable/modules/mixture.html
-    https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPRegressor.html
-
+    https://towardsdatascience.com/poker-with-python-how-to-score-all-hands-in-texas-holdem-6fd750ef73d
+    https://github.com/BradAJ/video_poker_analyzer
+    https://github.com/worldveil/deuces
+    https://www.oddsshark.com/poker/hand-rankings
+    https://www.pokervip.com/strategy-articles/texas-hold-em-no-limit-beginner/5-card-draw-poker-basic-strategy
